@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/gris_claro">
+
+    <ImageView
+        android:id="@+id/imageViewLogo"
+        android:layout_width="match_parent"
+        android:layout_height="207dp"
+        app:srcCompat="@drawable/logotipo" />
+    
+    <EditText
+        android:id="@+id/editTextEmail"
+        style="@style/viewCustom"
+        android:hint="@string/email"
+        android:inputType="textEmailAddress"
+        android:paddingTop="30dp"
+        android:layout_marginTop="8dp"
+        android:textColor="@color/black"
+        />
+
+    <EditText
+        android:id="@+id/editTextPassword"
+        style="@style/viewCustom"
+        android:hint="@string/password"
+        android:inputType="textPassword"
+        android:paddingTop="30dp"
+        android:layout_marginTop="8dp"
+        android:textColor="@color/black"/>
+
+
+    <TextView
+        android:id="@+id/textViewLogin"
+        style="@style/viewCustom"
+        android:layout_marginTop="8dp"
+        android:text="@string/login"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:background="@color/green"
+        android:paddingTop="7dp"
+        android:paddingBottom="7dp"
+        android:onClick="login"/>
+
+    <TextView
+        android:id="@+id/textViewregister"
+        style="@style/viewCustom"
+        android:layout_marginTop="8dp"
+        android:text="@string/register"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:background="@color/green"
+        android:paddingTop="7dp"
+        android:paddingBottom="7dp"
+        android:onClick="register"/>
+
+    <TextView
+        android:id="@+id/textViewForgotPassword"
+        style="@style/viewCustom"
+        android:layout_marginTop="8dp"
+        android:text="@string/forgot_password"
+        android:textAlignment="center"
+        android:textSize="13sp" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:backgroundTint="@color/white"
+        android:text="@string/google"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:textAlignment="textStart"
+        android:elevation="10dp"
+        android:drawableLeft="@drawable/google"
+    />
+
+
+</LinearLayout>
