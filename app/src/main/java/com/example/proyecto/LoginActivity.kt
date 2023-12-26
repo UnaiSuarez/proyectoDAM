@@ -8,7 +8,11 @@ import android.view.View
 import android.widget.EditText
 import android.widget.Toast
 import androidx.core.widget.doOnTextChanged
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.FirebaseFirestore
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -117,11 +121,11 @@ class LoginActivity : AppCompatActivity() {
         FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener {
                 if (it.isSuccessful) {
-                    var dateRegister = SimpleDateFormat("dd/MM/yyyy").format(Date())
-                    var dbregister = FirebaseFirestore.getInstance()
+                    val dateRegister = SimpleDateFormat("dd/MM/yyyy").format(Date())
+                    val dbregister = FirebaseFirestore.getInstance()
                     dbregister.collection("users").document(email).set(
                         hashMapOf(
-                            "user" to useremail,
+                            "user" to email,
                             "dateRegister" to dateRegister
                         )
                     )
@@ -158,6 +162,54 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun signInGoogle(){
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build()
+
+        var googleSignInClient = GoogleSignIn.getClient(this, gso)
+        googleSignInClient.signOut()
+
+
+        startActivityForResult(googleSignInClient.signInIntent, RESULT_CODE_GOOGLE_SIGN_IN)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
+        if (requestCode == RESULT_CODE_GOOGLE_SIGN_IN) {
+
+            try {
+                val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+                // Google Sign In was successful, authenticate with Firebase
+                val account = task.getResult(ApiException::class.java)!!
+
+                if (account != null){
+                    email = account.email!!
+                    val credential = GoogleAuthProvider.getCredential(account.idToken, null)
+                    mAuth.signInWithCredential(credential).addOnCompleteListener{
+                        if (it.isSuccessful){
+                            val dateRegister = SimpleDateFormat("dd/MM/yyyy").format(Date())
+                            val dbregister = FirebaseFirestore.getInstance()
+                            dbregister.collection("users").document(email).set(
+                                hashMapOf(
+                                    "user" to email,
+                                    "dateRegister" to dateRegister
+                                )
+                            )
+                            goHome(email, "Google")
+                        }
+                        else Toast.makeText(this, "Error en la conexión con Google", Toast.LENGTH_SHORT).show()
+
+                    }
+                }
+
+
+            } catch (e: ApiException) {
+                Toast.makeText(this, "Error en la conexión con Google", Toast.LENGTH_SHORT).show()
+            }
+        }
 
     }
 }

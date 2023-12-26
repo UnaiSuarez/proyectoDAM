@@ -6,7 +6,9 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import com.example.proyecto.LoginActivity.Companion.useremail
+import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,7 +24,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun signOut(){
         useremail = ""
-        FirebaseAuth.getInstance().signOut()
+        Firebase.auth.signOut()
         startActivity(Intent(this, LoginActivity::class.java))
     }
 }
