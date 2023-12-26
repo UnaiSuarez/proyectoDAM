@@ -3,9 +3,11 @@ package com.example.proyecto
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.View
 import android.widget.EditText
 import android.widget.Toast
+import androidx.core.widget.doOnTextChanged
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import java.text.SimpleDateFormat
@@ -26,6 +28,8 @@ class LoginActivity : AppCompatActivity() {
 
     private lateinit var mAuth: FirebaseAuth
 
+    private var RESULT_CODE_GOOGLE_SIGN_IN = 100
+
         override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
@@ -33,6 +37,10 @@ class LoginActivity : AppCompatActivity() {
             etEmail = findViewById(R.id.editTextEmail)
             etPassword = findViewById(R.id.editTextPassword)
             mAuth = FirebaseAuth.getInstance()
+
+            manageButtonLogin()
+            etEmail.doOnTextChanged { text, start, before, count -> manageButtonLogin() }
+            etPassword.doOnTextChanged { text, start, before, count -> manageButtonLogin() }
     }
 
     public override fun onStart() {
@@ -44,10 +52,25 @@ class LoginActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        var startMain = Intent(Intent.ACTION_MAIN)
+        super.onBackPressed()
+        val startMain = Intent(Intent.ACTION_MAIN)
         startMain.addCategory(Intent.CATEGORY_HOME)
         startMain.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         startActivity(startMain)
+    }
+
+    private fun manageButtonLogin(){
+        var btnLogin = findViewById<View>(R.id.textViewLogin)
+        email = etEmail.text.toString()
+        password = etPassword.text.toString()
+
+        if (!ValidateEmail.isEmailValid(email) || TextUtils.isEmpty(password)){
+            btnLogin.setBackgroundColor(resources.getColor(R.color.gray))
+            btnLogin.isEnabled = false
+        } else {
+            btnLogin.setBackgroundColor(resources.getColor(R.color.green))
+            btnLogin.isEnabled = true
+        }
     }
 
     fun login(view: View){
@@ -128,5 +151,13 @@ class LoginActivity : AppCompatActivity() {
                     Toast.makeText(this, "Error al enviar el email para restablecer su contraseña", Toast.LENGTH_LONG).show()
                 }
             }
+    }
+
+    fun callSignInGoogle(view: View){
+        signInGoogle()
+    }
+
+    private fun signInGoogle(){
+
     }
 }

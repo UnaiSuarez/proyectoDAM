@@ -6,12 +6,17 @@
     android:orientation="vertical"
     android:background="@color/gris_claro">
 
-    <ImageView
-        android:id="@+id/imageViewLogo"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="207dp"
-        app:srcCompat="@drawable/logotipo" />
-    
+        android:layout_height="wrap_content">
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="wrap_content"
+            android:layout_height="207dp"
+            android:src="@drawable/logotipo"
+            android:layout_marginTop="40dp"/>
+    </LinearLayout>
+
+
     <EditText
         android:id="@+id/editTextEmail"
         style="@style/viewCustom"
@@ -78,6 +83,7 @@
         android:textAlignment="textStart"
         android:elevation="10dp"
         android:drawableLeft="@drawable/google"
+        android:onClick="callSignInGoogle"
     />
 
 
