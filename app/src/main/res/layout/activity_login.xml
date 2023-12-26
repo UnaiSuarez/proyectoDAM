@@ -62,7 +62,9 @@
         android:layout_marginTop="8dp"
         android:text="@string/forgot_password"
         android:textAlignment="center"
-        android:textSize="13sp" />
+        android:textSize="13sp"
+        android:onClick="forgotPassword"/>
+
 
     <Button
         android:layout_width="match_parent"

@@ -35,6 +35,21 @@ class LoginActivity : AppCompatActivity() {
             mAuth = FirebaseAuth.getInstance()
     }
 
+    public override fun onStart() {
+        super.onStart()
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        if (currentUser != null) {
+            goHome(currentUser.email.toString(), currentUser.providerId)
+        }
+    }
+
+    override fun onBackPressed() {
+        var startMain = Intent(Intent.ACTION_MAIN)
+        startMain.addCategory(Intent.CATEGORY_HOME)
+        startMain.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        startActivity(startMain)
+    }
+
     fun login(view: View){
         loginUser()
     }
@@ -91,6 +106,26 @@ class LoginActivity : AppCompatActivity() {
                     goHome(email, "email")
                 } else {
                     Toast.makeText(this, "Error al registrar usuario", Toast.LENGTH_LONG).show()
+                }
+            }
+    }
+
+    fun forgotPassword(view: View){
+        resetPassword()
+    }
+
+    private fun resetPassword(){
+        email = etEmail.text.toString()
+        if (email.isEmpty()) {
+            Toast.makeText(this, "Debe ingresar el email", Toast.LENGTH_LONG).show()
+            return
+        }
+        FirebaseAuth.getInstance().sendPasswordResetEmail(email)
+            .addOnCompleteListener {
+                if (it.isSuccessful) {
+                    Toast.makeText(this, "Se ha enviado un email para restablecer su contraseña", Toast.LENGTH_LONG).show()
+                } else {
+                    Toast.makeText(this, "Error al enviar el email para restablecer su contraseña", Toast.LENGTH_LONG).show()
                 }
             }
     }
