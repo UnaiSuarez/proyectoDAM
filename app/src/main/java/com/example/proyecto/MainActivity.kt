@@ -27,4 +27,6 @@ class MainActivity : AppCompatActivity() {
         Firebase.auth.signOut()
         startActivity(Intent(this, LoginActivity::class.java))
     }
+
+    fun callAddStore(view: View) {}
 }
