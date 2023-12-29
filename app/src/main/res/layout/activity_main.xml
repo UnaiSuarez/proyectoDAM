@@ -4,64 +4,92 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="callSignOut"
-        android:text="cerrar sesion"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.951"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.946" />
+    tools:context=".MainActivity"
+    android:background="@color/gris_claro">
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="38dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="2dp"
         android:text="Tus almacenes"
-        tools:layout_editor_absoluteX="38dp"
-        tools:layout_editor_absoluteY="32dp" />
+        app:layout_constraintBottom_toTopOf="@+id/scrollView2"
+        app:layout_constraintStart_toStartOf="@+id/scrollView2"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ScrollView
-        android:layout_width="409dp"
-        android:layout_height="400dp"
-        tools:layout_editor_absoluteX="1dp"
-        tools:layout_editor_absoluteY="52dp">
+        android:id="@+id/scrollView2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="3dp"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView">
 
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:id="@+id/rvAlmacenes">
 
         </androidx.recyclerview.widget.RecyclerView>
     </ScrollView>
 
     <LinearLayout
-        android:layout_width="409dp"
-        android:layout_height="220dp"
+        android:id="@+id/linearLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="32dp"
         android:orientation="horizontal"
-        tools:layout_editor_absoluteX="1dp"
-        tools:layout_editor_absoluteY="453dp">
-
-        <Button
-            android:id="@+id/button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="callAddStore"
-            android:text="Añadir almacen" />
+        app:layout_constraintBottom_toTopOf="@+id/textView3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/scrollView2">
 
         <ImageButton
-            android:id="@+id/myButton"
-            android:layout_width="128dp"
-            android:layout_height="64dp"
-            android:background="@android:color/holo_blue_bright"
+            android:id="@+id/btAddAlmacen"
+            android:layout_width="132dp"
+            android:layout_height="61dp"
+            android:layout_marginStart="50dp"
+            android:background="@drawable/button_background"
+            android:contentDescription="@string/des_bt_add"
+            android:hint="@string/hint_bt_add"
             android:scaleType="center"
-            android:src="@drawable/ic_cart" />
+            android:src="@drawable/ic_add" />
+
+        <ImageButton
+            android:id="@+id/btCart"
+            android:layout_width="132dp"
+            android:layout_height="61dp"
+            android:layout_marginStart="50dp"
+            android:background="@drawable/button_background"
+            android:contentDescription="@string/bt_cart_des"
+            android:hint="@string/bt_cart"
+            android:scaleType="center"
+            android:src="@drawable/ic_cart"
+            tools:ignore="ContentDescription" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="añadirDatos"/>
 
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="28dp"
+        android:minHeight="48dp"
+        android:onClick="callSignOut"
+        android:text="cerrar sesion"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

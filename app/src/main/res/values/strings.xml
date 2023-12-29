@@ -9,6 +9,10 @@
 
     <string name="google">Google</string>
     <string name="bienvenido_a_smartpantry">Bienvenido a SmartPantry</string>
+    <string name="des_bt_add">este boton sirve para añadir un almacen</string>
+    <string name="hint_bt_add">boton add almacen</string>
+    <string name="bt_cart">boton cart</string>
+    <string name="bt_cart_des">este boton sirve para ir al carrito de la compra</string>
 
 
 </resources>
