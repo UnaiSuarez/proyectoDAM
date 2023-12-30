@@ -21,7 +21,7 @@ class AlmacenActivity : AppCompatActivity() {
 
 
         tvMensaje = findViewById(R.id.tvAlmacenName)
-        tvMensaje.text = MainActivity.editAlmacen.toString()
+        //tvMensaje.text = MainActivity.editAlmacen.toString()
 
     }
 
