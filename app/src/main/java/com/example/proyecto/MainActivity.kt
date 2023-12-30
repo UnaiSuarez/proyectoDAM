@@ -47,6 +47,10 @@ class MainActivity : AppCompatActivity() {
                     userFragment = UserFragment()
                     setCurrentFragment(userFragment)
                 }
+
+                R.id.nav_exit -> {
+                    signOut()
+                }
             }
             true
 
@@ -61,5 +65,12 @@ class MainActivity : AppCompatActivity() {
             replace(R.id.fragmentContainerView, fragment)
             commit()
         }
+
+    private fun signOut(){
+        useremail = ""
+        MainFragment.editAlmacen = Almacen()
+        Firebase.auth.signOut()
+        startActivity(Intent(this, LoginActivity::class.java))
+    }
 
 }

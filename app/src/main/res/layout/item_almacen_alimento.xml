@@ -30,7 +30,7 @@
                 android:src="@drawable/ic_food" />
 
             <LinearLayout
-                android:layout_width="230dp"
+                android:layout_width="220dp"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
                 <TextView
@@ -51,11 +51,12 @@
             </LinearLayout>
 
             <TextView
+                android:id="@+id/btEditAlimentoAlmacen"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:drawableEndCompat="@drawable/ic_settings"
                 android:layout_marginLeft="20dp"
-                android:layout_marginTop="15dp"/>
+                android:layout_marginTop="15dp" />
         </LinearLayout>
     </FrameLayout>
 
