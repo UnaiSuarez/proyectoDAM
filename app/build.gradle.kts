@@ -59,4 +59,6 @@ dependencies {
 
     implementation("androidx.fragment:fragment-ktx:1.6.2")
     implementation("com.google.android.material:material:1.11.0")
+
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.1")
 }

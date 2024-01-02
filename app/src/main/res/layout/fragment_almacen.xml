@@ -32,23 +32,36 @@
             android:paddingBottom="15dp"/>
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:text="Buscar alimento"
-                android:textSize="18sp"/>
 
-            <EditText
+            <AutoCompleteTextView
+                android:id="@+id/etBusquedaAlimento"
+                android:layout_marginLeft="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="48dp"
                 android:hint="@string/busque_el_alimento_que_desee"
-                android:drawableStart="@drawable/ic_lupa"/>
+                android:drawableStart="@drawable/ic_lupa"
+                android:textColor="@color/black"/>
+
+            <ImageButton
+                android:id="@+id/btAddAlimentoAlmacen"
+                android:layout_width="60dp"
+                android:layout_height="48dp"
+                android:src="@drawable/ic_add"
+                android:layout_marginLeft="50dp"
+                android:background="@drawable/button_background"
+                android:contentDescription="TODO"/>
 
 
         </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
 
 
         <ScrollView
