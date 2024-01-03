@@ -1,9 +1,13 @@
 package com.example.proyecto.fragments
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
+import android.text.InputType
 import androidx.fragment.app.Fragment
 import android.view.View
+import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -29,6 +33,7 @@ class MainFragment : Fragment(R.layout.fragment_main2) {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var almacenAdapter: AlmacenAdapter
+    private lateinit var btnAddAlmacen: ImageButton
 
     private val almacenFragment = AlmacenFragment()
 
@@ -42,22 +47,55 @@ class MainFragment : Fragment(R.layout.fragment_main2) {
         recyclerView.layoutManager = manager
         recyclerView.adapter = almacenAdapter
 
+        btnAddAlmacen = view.findViewById(R.id.btAddAlmacen)
+        btnAddAlmacen.setOnClickListener {
+            callAddStore(it)
+        }
+
 
     }
 
 
     fun callStore(almacen: Almacen) {
         editAlmacen = almacen
-        Toast.makeText(context, "Has pulsado en ${almacen.nombre}", Toast.LENGTH_SHORT).show()
         setCurrentFragment(almacenFragment)
-
 
     }
 
 
 
 
-    fun callAddStore(view: View) {}
+    fun callAddStore(view: View) {
+        funAddStore()
+    }
+
+    private fun funAddStore() {
+        val builder = AlertDialog.Builder(context)
+        builder.setTitle("Añadir Almacén")
+
+        val input = EditText(context)
+        input.inputType = InputType.TYPE_CLASS_TEXT
+        builder.setView(input)
+
+        builder.setPositiveButton("Añadir") { dialog, which ->
+            val almacen = Almacen(nombre = input.text.toString(), dueno = useremail)
+            val db = FirebaseFirestore.getInstance()
+            db.collection("almacenes")
+                .add(almacen)
+                .addOnSuccessListener { documentReference ->
+                    Toast.makeText(context, "Almacén añadido", Toast.LENGTH_SHORT).show()
+                    loadRecycler()
+                }
+                .addOnFailureListener { e ->
+                    Toast.makeText(context, "Error al añadir el almacén", Toast.LENGTH_SHORT).show()
+                }
+        }
+        builder.setNegativeButton("Cancelar") { dialog, which ->
+            dialog.cancel()
+        }
+
+        builder.show()
+    }
     fun añadirDatos(view: View) {
         //addDatos()
         loadRecycler()

@@ -95,26 +95,34 @@ class AlmacenFragment : Fragment(R.layout.fragment_almacen) {
 
                 val db = FirebaseFirestore.getInstance()
                 db.collection("alimentos").document(autoCompleteTextView.text.toString())
-                .get()
-                .addOnSuccessListener { documents ->
-                    alimentoBd = documents.toObject(Alimento::class.java)
-                    category = alimentoBd!!.categoria
-                    val alimento: Alimento = Alimento(autoCompleteTextView.text.toString(), category.toString(), cantidadAlimento)
-                    alimentosAlmacenList.add(alimento)
+                    .get()
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            val document = task.result
+                            if (document != null && document.exists()) {
+                                alimentoBd = document.toObject(Alimento::class.java)
+                                category = alimentoBd!!.categoria
+                            } else {
+                                category = "personalizada"
+                            }
+                            val alimento: Alimento = Alimento(autoCompleteTextView.text.toString(), category.toString(), cantidadAlimento)
+                            alimentosAlmacenList.add(alimento)
 
-                    db.collection("almacenes").document(MainFragment.editAlmacen.key).update("alimentos", alimentosAlmacenList)
-                    alimentosAlmacenAdapter.notifyDataSetChanged()
-                }
-                .addOnFailureListener { exception ->
-                    Toast.makeText(context, "Error al cargar los datos", Toast.LENGTH_SHORT).show()
-                }
+                            db.collection("almacenes").document(MainFragment.editAlmacen.key).update("alimentos", alimentosAlmacenList)
+                            alimentosAlmacenAdapter.notifyDataSetChanged()
+                            autoCompleteTextView.setText("")
+                        } else {
+                            Toast.makeText(context, "Error al cargar los datos", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+
 
 
             }
             builder.show()
 
 
-            autoCompleteTextView.setText("")
+
 
         } else {
             Toast.makeText(context, "Introduce un alimento", Toast.LENGTH_SHORT).show()
