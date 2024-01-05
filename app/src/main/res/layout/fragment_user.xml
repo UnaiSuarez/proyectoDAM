@@ -73,15 +73,21 @@
                 android:id="@+id/lyCuenta"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
                 android:background="@drawable/shape">
                 <TextView
-                    android:text="@string/cuenta"
+                    android:id="@+id/tvChangePassword"
+                    android:text="Cambiar contraseña"
                     style="@style/SettingsStyle"
-                    app:drawableStartCompat="@drawable/ic_user"
                     app:drawableEndCompat="@drawable/ic_flecha_settings_derecha" />
+                <TextView
+                    android:id="@+id/tvDeleteAcount"
+                    android:text="Borrar cuenta"
+                    style="@style/SettingsStyle"
+                    app:drawableEndCompat="@drawable/ic_flecha_settings_derecha" />
+
             </LinearLayout>
             <TextView
                 android:text="@string/privacidad"
@@ -119,6 +125,7 @@
             android:layout_margin="5dp">
 
             <TextView
+                android:id="@+id/tvCerrarSesion"
                 android:text="@string/cerrar_sesi_n"
                 style="@style/SettingsStyle"
                 app:drawableStartCompat="@drawable/ic_exit"
