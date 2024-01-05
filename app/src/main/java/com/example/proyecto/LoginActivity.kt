@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
+import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.core.widget.doOnTextChanged
@@ -69,10 +70,10 @@ class LoginActivity : AppCompatActivity() {
         password = etPassword.text.toString()
 
         if (!ValidateEmail.isEmailValid(email) || TextUtils.isEmpty(password)){
-            btnLogin.setBackgroundColor(resources.getColor(R.color.gray))
+            btnLogin.background = resources.getDrawable(R.drawable.button_background_disabled)
             btnLogin.isEnabled = false
         } else {
-            btnLogin.setBackgroundColor(resources.getColor(R.color.green))
+            btnLogin.background = resources.getDrawable(R.drawable.button_background)
             btnLogin.isEnabled = true
         }
     }
@@ -114,27 +115,11 @@ class LoginActivity : AppCompatActivity() {
         dialog.show()
     }
 
+
+
     private fun registerUser(){
-        email = etEmail.text.toString()
-        password = etPassword.text.toString()
-
-        FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
-            .addOnCompleteListener {
-                if (it.isSuccessful) {
-                    val dateRegister = SimpleDateFormat("dd/MM/yyyy").format(Date())
-                    val dbregister = FirebaseFirestore.getInstance()
-                    dbregister.collection("users").document(email).set(
-                        hashMapOf(
-                            "user" to email,
-                            "dateRegister" to dateRegister
-                        )
-                    )
-
-                    goHome(email, "email")
-                } else {
-                    Toast.makeText(this, "Error al registrar usuario", Toast.LENGTH_LONG).show()
-                }
-            }
+        val registerIntent = Intent(this, RegisterActivity::class.java)
+        startActivity(registerIntent)
     }
 
     fun forgotPassword(view: View){
@@ -162,32 +147,35 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun signInGoogle(){
+        // Configuración de Google Sign In
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
             .requestEmail()
             .build()
-
+        // Cliente de Google Sign In
         var googleSignInClient = GoogleSignIn.getClient(this, gso)
         googleSignInClient.signOut()
 
-
+        // Iniciar la actividad de autenticación con Google
         startActivityForResult(googleSignInClient.signInIntent, RESULT_CODE_GOOGLE_SIGN_IN)
     }
 
+    // Resultado de la autenticación con Google
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
+        // Resultado de la autenticación con Google exitosa
         if (requestCode == RESULT_CODE_GOOGLE_SIGN_IN) {
 
             try {
                 val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-                // Google Sign In was successful, authenticate with Firebase
+                //Inicio de sesión con Google exitoso
                 val account = task.getResult(ApiException::class.java)!!
-
+                //Obtener credenciales de Google
                 if (account != null){
                     email = account.email!!
                     val credential = GoogleAuthProvider.getCredential(account.idToken, null)
+                    // Inicio de sesión con Firebase
                     mAuth.signInWithCredential(credential).addOnCompleteListener{
                         if (it.isSuccessful){
                             val dateRegister = SimpleDateFormat("dd/MM/yyyy").format(Date())
@@ -198,6 +186,7 @@ class LoginActivity : AppCompatActivity() {
                                     "dateRegister" to dateRegister
                                 )
                             )
+                            // Ir a la pantalla principal
                             goHome(email, "Google")
                         }
                         else Toast.makeText(this, "Error en la conexión con Google", Toast.LENGTH_SHORT).show()

@@ -16,6 +16,14 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="busque_el_alimento_que_desee">busque el alimento que desee</string>
+    <string name="editar_nombre">editar nombre</string>
+    <string name="eliminar_almacen">eliminar almacen</string>
+    <string name="repeat_the_password">Repeat the password</string>
+    <string name="cuenta">Cuenta</string>
+    <string name="privacidad">Privacidad</string>
+    <string name="seguridad">Seguridad</string>
+    <string name="compartir_perfil">Compartir perfil</string>
+    <string name="cerrar_sesi_n">Cerrar sesión</string>
 
 
 </resources>

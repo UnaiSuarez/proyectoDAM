@@ -1,0 +1,4 @@
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="true" android:drawable="@color/gray"/> <!-- color de fondo cuando se presiona -->
+    <item android:drawable="@color/white"/> <!-- color de fondo por defecto -->
+</selector>

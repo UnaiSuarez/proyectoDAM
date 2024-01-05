@@ -20,7 +20,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 
 class MainActivity : AppCompatActivity() {
 
-
+    private var backPressedTime: Long = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -30,6 +30,8 @@ class MainActivity : AppCompatActivity() {
 
         var mainFragment = MainFragment()
         var userFragment = UserFragment()
+
+
 
         supportFragmentManager.beginTransaction().apply {
             replace(R.id.fragmentContainerView, mainFragment)
@@ -72,5 +74,23 @@ class MainActivity : AppCompatActivity() {
         Firebase.auth.signOut()
         startActivity(Intent(this, LoginActivity::class.java))
     }
+
+
+    override fun onBackPressed() {
+        val fragment = supportFragmentManager.findFragmentById(R.id.fragmentContainerView)
+        if (fragment is BackPressedListener) {
+            (fragment as BackPressedListener).onBackPressed()
+        } else {
+            super.onBackPressed()
+        }
+    }
+
+
+    interface BackPressedListener {
+        fun onBackPressed()
+    }
+
+
+
 
 }

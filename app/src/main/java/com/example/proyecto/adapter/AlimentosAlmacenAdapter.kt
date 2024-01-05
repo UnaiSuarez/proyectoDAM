@@ -47,7 +47,6 @@ class AlimentosAlmacenAdapter(
     }
 
     private fun callSettingsAlimento(alimento: Alimento, view: View, context: Context) {
-        Toast.makeText(context, "Has pulsado en ${alimento.nombre}", Toast.LENGTH_SHORT).show()
         val popMenu = PopupMenu(context, view)
         popMenu.menuInflater.inflate(R.menu.settings_alimento_menu, popMenu.menu)
         popMenu.show()

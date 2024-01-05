@@ -1,16 +1,138 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragments.UserFragment"
-    android:background="@color/white">
+    android:background="@color/gris_claro">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+   <LinearLayout
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       android:orientation="vertical">
+       <TextView
+           android:id="@+id/tvNombreUsuario"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:hint="Nombre de usuario"
+           android:textColor="@color/black"
+           android:textSize="25dp"
+           android:textAlignment="center"
+           android:layout_marginTop="20dp"/>
+       <de.hdodenhof.circleimageview.CircleImageView
+           android:id="@+id/civFotoUsuario"
+           android:layout_width="100dp"
+           android:layout_height="100dp"
+           android:src="@drawable/icono_usuario_pre"
+           android:layout_gravity="center_horizontal"
+           android:layout_marginTop="20dp"/>
+
+       <TextView
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:text="Ajustes y privacidad"
+           android:textSize="30dp"
+           android:textColor="@color/black"
+           android:textStyle="bold"
+           android:layout_marginLeft="25dp"
+           android:layout_marginTop="15dp"/>
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="user"
-        android:textSize="100dp"/>
+        android:orientation="vertical">
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cuenta"
+            android:textSize="15sp"
+            android:textColor="@color/black"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginBottom="5dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/shape"
+            android:layout_margin="5dp">
+
+            <TextView
+                android:id="@+id/tvCuenta"
+                android:text="@string/cuenta"
+                style="@style/SettingsStyle"
+                app:drawableStartCompat="@drawable/ic_user"
+                app:drawableEndCompat="@drawable/ic_flecha_settings_derecha" />
+            <LinearLayout
+                android:id="@+id/lyCuenta"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:background="@drawable/shape">
+                <TextView
+                    android:text="@string/cuenta"
+                    style="@style/SettingsStyle"
+                    app:drawableStartCompat="@drawable/ic_user"
+                    app:drawableEndCompat="@drawable/ic_flecha_settings_derecha" />
+            </LinearLayout>
+            <TextView
+                android:text="@string/privacidad"
+                style="@style/SettingsStyle"
+                app:drawableStartCompat="@drawable/ic_candado"
+                app:drawableEndCompat="@drawable/ic_flecha_settings_derecha"/>
+            <TextView
+                android:text="@string/seguridad"
+                style="@style/SettingsStyle"
+                app:drawableStartCompat="@drawable/ic_escudo"
+                app:drawableEndCompat="@drawable/ic_flecha_settings_derecha"/>
+            <TextView
+                android:text="@string/compartir_perfil"
+                style="@style/SettingsStyle"
+                app:drawableStartCompat="@drawable/ic_flecha_compartir"
+                app:drawableEndCompat="@drawable/ic_flecha_settings_derecha"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Inicio de sesión"
+            android:textSize="15sp"
+            android:textColor="@color/black"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="5dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:background="@drawable/shape"
+            android:layout_margin="5dp">
+
+            <TextView
+                android:text="@string/cerrar_sesi_n"
+                style="@style/SettingsStyle"
+                app:drawableStartCompat="@drawable/ic_exit"
+                app:drawableEndCompat="@drawable/ic_flecha_settings_derecha"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+
+
+</ScrollView>
+
+
+
+   </LinearLayout>
 </FrameLayout>
