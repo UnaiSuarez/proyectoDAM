@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="6dp">
+
+    <FrameLayout
+        android:id="@+id/flAlmacenAlimento"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_sombra"
+        tools:layout_editor_absoluteX="1dp"
+        tools:layout_editor_absoluteY="4dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/alimentoCarrito"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <ImageView
+                    android:id="@+id/buyAlimento"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginLeft="6dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginBottom="6dp"
+                    android:background="@drawable/button_background"
+                    android:contentDescription="@string/des_bt_add"
+                    android:hint="@string/hint_bt_add"
+                    android:scaleType="center"
+                    android:src="@drawable/ic_food" />
+
+
+                <TextView
+                    android:id="@+id/tvAlimentoName"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:textColor="@color/black"
+                    tools:text="hola"
+                    android:layout_gravity="center_vertical"/>
+
+                <TextView
+                    android:id="@+id/tvCantidadAlimento"
+                    android:layout_width="30dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:textColor="@color/black"
+                    tools:text="hola"
+                    android:layout_gravity="center_vertical"/>
+            </LinearLayout>
+
+
+
+
+            <TextView
+                android:id="@+id/btEditBuyAlimento"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:drawableEndCompat="@drawable/ic_settings"
+                android:layout_marginLeft="20dp"
+                android:layout_gravity="center_vertical"/>
+        </LinearLayout>
+    </FrameLayout>
+
+
+</LinearLayout>

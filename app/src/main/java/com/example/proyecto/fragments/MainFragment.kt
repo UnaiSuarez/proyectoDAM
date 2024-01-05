@@ -25,6 +25,7 @@ import com.example.proyecto.LoginActivity.Companion.useremail
 import com.example.proyecto.MainActivity
 import com.example.proyecto.R
 import com.example.proyecto.adapter.AlmacenAdapter
+import com.example.proyecto.utilites.CrearDatos
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -44,8 +45,10 @@ class MainFragment : Fragment(R.layout.fragment_main2), MainActivity.BackPressed
     private lateinit var tvPrimerAlmacen: TextView
     private lateinit var tvFlecha: TextView
     private var backPressedTime: Long = 0
+    private lateinit var btnCart: ImageButton
 
     private val almacenFragment = AlmacenFragment()
+    private val carritoFragment = CarritoFragment()
 
     val manager = GridLayoutManager(context, 2)
 
@@ -53,6 +56,7 @@ class MainFragment : Fragment(R.layout.fragment_main2), MainActivity.BackPressed
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
 
         recyclerView = view.findViewById<RecyclerView>(R.id.rvAlmacenes)
         almacenAdapter = AlmacenAdapter(almacenList) { almacen: Almacen -> callStore(almacen) }
@@ -76,6 +80,11 @@ class MainFragment : Fragment(R.layout.fragment_main2), MainActivity.BackPressed
         animation.repeatCount = Animation.INFINITE
         animation.repeatMode = Animation.REVERSE
         tvFlecha.startAnimation(animation)
+
+        btnCart = view.findViewById(R.id.btnCart)
+        btnCart.setOnClickListener {
+            setCurrentFragment(carritoFragment)
+        }
 
     }
 

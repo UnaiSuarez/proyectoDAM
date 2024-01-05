@@ -51,6 +51,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="48dp"
+                android:textColorHint="@color/gris_oscuro"
                 android:hint="@string/busque_el_alimento_que_desee"
                 android:drawableStart="@drawable/ic_lupa"
                 android:textColor="@color/black"/>

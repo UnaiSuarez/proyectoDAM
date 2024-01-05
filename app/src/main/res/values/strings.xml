@@ -24,6 +24,9 @@
     <string name="seguridad">Seguridad</string>
     <string name="compartir_perfil">Compartir perfil</string>
     <string name="cerrar_sesi_n">Cerrar sesión</string>
+    <string name="carrito_text">Este es tu carrito de la compra</string>
+    <string name="productos_comprados">Productos comprados</string>
+    <string name="carrito">Carrito</string>
 
 
 </resources>
