@@ -1,12 +1,19 @@
 package com.example.proyecto.fragments
 
+import android.app.AlertDialog
 import android.os.Bundle
+import android.text.InputType
 import androidx.fragment.app.Fragment
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.TranslateAnimation
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
+import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.proyecto.Alimento
@@ -21,11 +28,9 @@ import com.google.firebase.firestore.FirebaseFirestore
 class CarritoFragment : Fragment(R.layout.fragment_carrito), OnItemClickListener {
 
     companion object {
-        fun newInstance() = CarritoFragment()
-
         var alimetosCarritoList = ArrayList<Alimento>()
         var alimentosCompradosList = ArrayList<Alimento>()
-
+        var allAlimentosList = ArrayList<String>()
     }
 
     private lateinit var lytCarrito: LinearLayout
@@ -36,12 +41,14 @@ class CarritoFragment : Fragment(R.layout.fragment_carrito), OnItemClickListener
     private lateinit var rvComprados: RecyclerView
     private lateinit var carritoAdapter: CarritoAdapter
     private lateinit var buyCarritoAdapter: BuyCarritoAdapter
+    private lateinit var etBusquedaAlimento: AutoCompleteTextView
+    private lateinit var botonAñadir: ImageButton
 
     val animation = TranslateAnimation(0f, 0f, 0f, 50f)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
+        loadAllAliemntos()
 
         lytCarrito = view.findViewById(R.id.lytCarrito)
         lytProductosComprados = view.findViewById(R.id.lytProductosComprados)
@@ -57,6 +64,13 @@ class CarritoFragment : Fragment(R.layout.fragment_carrito), OnItemClickListener
         animation.repeatMode = Animation.REVERSE
         icFlecha.startAnimation(animation)
 
+        //autocompletar alimento
+        etBusquedaAlimento = view.findViewById<AutoCompleteTextView>(R.id.etBusquedaAlimento)
+        //adaptador para el autocompletar
+        val adapter: ArrayAdapter<String> = ArrayAdapter<String>(requireContext(), android.R.layout.simple_dropdown_item_1line, AlmacenFragment.allAlimentosList)
+        //asignar el adaptador al autocompletar
+        etBusquedaAlimento.setAdapter(adapter)
+
 
         carritoAdapter = CarritoAdapter(alimetosCarritoList, requireContext(), alimentosCompradosList, listener = this)
         buyCarritoAdapter = BuyCarritoAdapter(alimentosCompradosList, requireContext(), alimetosCarritoList, listener = this)
@@ -64,6 +78,12 @@ class CarritoFragment : Fragment(R.layout.fragment_carrito), OnItemClickListener
         // Luego carga los RecyclerViews
         loadRecyclerViewCarrito()
         loadRecyclerViewComprados()
+
+        botonAñadir = view.findViewById<ImageButton>(R.id.btAddAlimentoAlmacen)
+        //al pulsar el boton, añadir el alimento
+        botonAñadir.setOnClickListener { view ->
+            addAlimento()
+        }
 
 
 
@@ -193,5 +213,99 @@ class CarritoFragment : Fragment(R.layout.fragment_carrito), OnItemClickListener
         }
     }
 
+    private fun loadAllAliemntos() {
+        //limpiar la lista de alimentos
+        AlmacenFragment.allAlimentosList.clear()
+        val db = FirebaseFirestore.getInstance()
+        //cargar todos los alimentos de la base de datos
+        db.collection("alimentos")
+            .get()
+            .addOnSuccessListener { documents ->
+                //recorrer los documentos y añadir los alimentos a la lista de alimentos
+                for (document in documents) {
+                    //convertir los datos a un objeto alimento
+                    val alimento = document.toObject(Alimento::class.java)
+                    //añadir el nombre del alimento a la lista de alimentos
+                    AlmacenFragment.allAlimentosList.add(alimento.nombre)
+                }
+            }
+            //si la tarea no se ha completado correctamente
+            .addOnFailureListener { exception ->
+                Toast.makeText(context, "Error al cargar los datos", Toast.LENGTH_SHORT).show()
+            }
+    }
+
+    private fun addAlimento(){
+        var cantidadAlimento = 1
+        var alimentoBd: Alimento? = null
+        var category: String? = null
+        //si el autocompletar no esta vacio
+        if (etBusquedaAlimento.text.toString() != "") {
+            val builder = AlertDialog.Builder(context)
+            //dialogo para introducir la cantidad del alimento
+            builder.setTitle("Editar cantidad")
+            val input = EditText(context)
+            //tipo de entrada de texto numerico
+            input.inputType = InputType.TYPE_CLASS_NUMBER
+            builder.setView(input)
+            //al pulsar ok, añadir el alimento al almacen
+            builder.setPositiveButton("OK") { dialog, which ->
+                //si la cantidad no esta vacia, asignar la cantidad introducida, si esta vacia, asignar 1
+                if (input.text.toString() != "") {
+                    //convertir el texto a entero
+                    cantidadAlimento = input.text.toString().toInt()
+                }
+                //si la cantidad es menor que 1, asignar 1
+                else{
+                    cantidadAlimento = 1
+                }
+
+                //si el alimento esta en la base de datos, asignar la categoria del alimento, si no, asignar personalizada
+                val db = FirebaseFirestore.getInstance()
+                //comprobar si el alimento esta en la base de datos
+                db.collection("alimentos").document(etBusquedaAlimento.text.toString())
+                    .get()
+                    .addOnCompleteListener { task ->
+                        //si la tarea se ha completado correctamente
+                        if (task.isSuccessful) {
+                            val document = task.result
+                            //si el documento existe, asignar la categoria del alimento, si no, asignar personalizada
+                            if (document != null && document.exists()) {
+                                alimentoBd = document.toObject(Alimento::class.java)
+                                category = alimentoBd!!.categoria
+                            } else {
+                                category = "personalizada"
+                            }
+                            //crear el alimento
+                            val alimento: Alimento = Alimento(etBusquedaAlimento.text.toString(), category.toString(), cantidadAlimento)
+                            //añadir el alimento a la lista de alimentos del almacen
+                            alimetosCarritoList.add(alimento)
+                            //añadir el alimento a la base de datos
+                            db.collection("carrito").document(LoginActivity.useremail).update("alimentos",
+                                alimetosCarritoList
+                            )
+                            //notificar al adaptador que se ha añadido un alimento
+                            loadRecyclerViewCarrito()
+                            //limpiar el autocompletar
+                            etBusquedaAlimento.setText("")
+                        }
+                        //si la tarea no se ha completado correctamente
+                        else {
+                            //toast error
+                            Toast.makeText(context, "Error al cargar los datos", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+
+
+
+            }
+            //al pulsar cancelar, cerrar el dialogo
+            builder.show()
+        }
+        //si el autocompletar esta vacio, mostrar toast
+        else {
+            Toast.makeText(context, "Introduce un alimento", Toast.LENGTH_SHORT).show()
+        }
+    }
 
 }

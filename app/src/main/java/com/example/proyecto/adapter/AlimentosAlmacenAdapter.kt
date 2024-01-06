@@ -13,10 +13,12 @@ import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.proyecto.Alimento
 import com.example.proyecto.Almacen
+import com.example.proyecto.LoginActivity
 import com.example.proyecto.R
 import com.example.proyecto.fragments.AlmacenFragment
 import com.google.firebase.Firebase
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 
 class AlimentosAlmacenAdapter(
@@ -64,6 +66,10 @@ class AlimentosAlmacenAdapter(
                     editAlimento(alimento)
                     true
                 }
+                R.id.nav_addCarrito -> {
+                    addCarrito(alimento)
+                    true
+                }
                 else -> false
             }
         }
@@ -97,6 +103,26 @@ class AlimentosAlmacenAdapter(
             val db = FirebaseFirestore.getInstance()
             db.collection("almacenes").document(keyAlmacen!!).update("alimentos", alimentosAlmacen)
             notifyItemChanged(position)
+
+        }
+        builder.show()
+    }
+
+    private fun addCarrito(alimento: Alimento) {
+        val position = alimentosAlmacen.indexOf(alimento)
+        val builder = AlertDialog.Builder(context)
+        builder.setTitle("Editar cantidad")
+        val input = EditText(context)
+        input.inputType = InputType.TYPE_CLASS_NUMBER
+        builder.setView(input)
+        builder.setPositiveButton("OK") { dialog, which ->
+            val db = FirebaseFirestore.getInstance()
+            val carritoRef = db.collection("carrito").document(LoginActivity.useremail)
+            val alimentosUpdate = hashMapOf<String, Any>(
+                "alimentos" to FieldValue.arrayUnion(alimento)
+            )
+
+            carritoRef.update(alimentosUpdate)
 
         }
         builder.show()

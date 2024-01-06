@@ -27,6 +27,7 @@
     <string name="carrito_text">Este es tu carrito de la compra</string>
     <string name="productos_comprados">Productos comprados</string>
     <string name="carrito">Carrito</string>
+    <string name="a_adir_al_carrito">Añadir al carrito</string>
 
 
 </resources>

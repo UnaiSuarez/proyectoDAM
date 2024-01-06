@@ -1,13 +1,19 @@
 package com.example.proyecto.adapter
 
+import android.app.AlertDialog
 import android.content.Context
+import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
+import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.proyecto.Alimento
+import com.example.proyecto.LoginActivity
 import com.example.proyecto.R
+import com.google.firebase.firestore.FirebaseFirestore
 
 class BuyCarritoAdapter(
     private val buyCarritoList:ArrayList<Alimento>,
@@ -35,7 +41,53 @@ class BuyCarritoAdapter(
     }
 
     private fun callSettings(alimento: Alimento, view: View, context: Context) {
+        val popMenu = PopupMenu(context, view)
+        popMenu.menuInflater.inflate(R.menu.settings_alimento_menu, popMenu.menu)
+        popMenu.show()
+        popMenu.setOnMenuItemClickListener { item ->
+            val position = carritoList.indexOf(alimento)
+            when(item.itemId){
+                R.id.nav_eliminar -> {
+                    //toast eliminar y nombre del alimento
+                    deleteAlimento(position)
+                    true
+                }
+                R.id.nav_editar -> {
+                    editAlimento(alimento)
+                    true
+                }
+                else -> false
+            }
+        }
+    }
 
+    private fun deleteAlimento(position: Int) {
+        buyCarritoList.removeAt(position)
+        notifyItemRemoved(position)
+        val db = FirebaseFirestore.getInstance()
+        db.collection("carrito").document(LoginActivity.useremail).update("alimentosComprados", buyCarritoList)
+        listener.onItemClicked()
+    }
+
+    private fun editAlimento(alimento: Alimento) {
+        val position = buyCarritoList.indexOf(alimento)
+        val builder = AlertDialog.Builder(context)
+        builder.setTitle("Editar cantidad")
+        val input = EditText(context)
+        input.inputType = InputType.TYPE_CLASS_NUMBER
+        builder.setView(input)
+        builder.setPositiveButton("OK") { dialog, which ->
+            alimento.cantidad = input.text.toString().toInt()
+            buyCarritoList[position] = alimento
+
+            // Actualiza la lista en Firebase
+            val db = FirebaseFirestore.getInstance()
+            db.collection("carrito").document(LoginActivity.useremail).update("alimentosComprados", buyCarritoList)
+            notifyItemChanged(position)
+            listener.onItemClicked()
+
+        }
+        builder.show()
     }
 
     private fun devolverFunction(alimento: Alimento, view: View, context: Context) {
@@ -46,5 +98,8 @@ class BuyCarritoAdapter(
         notifyItemRemoved(index)
         carritoAdapter?.notifyItemInserted(carritoList.size - 1)
         listener.onItemClicked()
+        val db = FirebaseFirestore.getInstance()
+        db.collection("carrito").document(LoginActivity.useremail).update("alimentos", carritoList)
+        db.collection("carrito").document(LoginActivity.useremail).update("alimentosComprados", buyCarritoList)
     }
 }
