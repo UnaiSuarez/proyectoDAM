@@ -49,7 +49,7 @@
 
                 <TextView
                     android:id="@+id/tvCantidadAlimento"
-                    android:layout_width="30dp"
+                    android:layout_width="35dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:textColor="@color/black"
@@ -61,7 +61,7 @@
 
 
             <TextView
-                android:id="@+id/btEditBuyAlimento"
+                android:id="@+id/btEditAlimento"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:drawableEndCompat="@drawable/ic_settings"

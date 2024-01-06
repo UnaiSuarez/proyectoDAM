@@ -2,34 +2,46 @@ package com.example.proyecto.fragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.TranslateAnimation
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.proyecto.Alimento
 import com.example.proyecto.LoginActivity
 import com.example.proyecto.R
+import com.example.proyecto.adapter.BuyCarritoAdapter
+import com.example.proyecto.adapter.CarritoAdapter
+import com.example.proyecto.adapter.OnItemClickListener
 import com.google.firebase.firestore.FirebaseFirestore
 
 
-class CarritoFragment : Fragment(R.layout.fragment_carrito) {
+class CarritoFragment : Fragment(R.layout.fragment_carrito), OnItemClickListener {
 
     companion object {
+        fun newInstance() = CarritoFragment()
+
         var alimetosCarritoList = ArrayList<Alimento>()
         var alimentosCompradosList = ArrayList<Alimento>()
+
     }
 
     private lateinit var lytCarrito: LinearLayout
     private lateinit var lytProductosComprados: LinearLayout
     private lateinit var lytSinAlimentos: LinearLayout
     private lateinit var icFlecha: TextView
+    private lateinit var rvCarrito: RecyclerView
+    private lateinit var rvComprados: RecyclerView
+    private lateinit var carritoAdapter: CarritoAdapter
+    private lateinit var buyCarritoAdapter: BuyCarritoAdapter
 
     val animation = TranslateAnimation(0f, 0f, 0f, 50f)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
 
         lytCarrito = view.findViewById(R.id.lytCarrito)
         lytProductosComprados = view.findViewById(R.id.lytProductosComprados)
@@ -45,8 +57,39 @@ class CarritoFragment : Fragment(R.layout.fragment_carrito) {
         animation.repeatMode = Animation.REVERSE
         icFlecha.startAnimation(animation)
 
-        loadCarrito()
 
+        carritoAdapter = CarritoAdapter(alimetosCarritoList, requireContext(), alimentosCompradosList, listener = this)
+        buyCarritoAdapter = BuyCarritoAdapter(alimentosCompradosList, requireContext(), alimetosCarritoList, listener = this)
+
+        // Luego carga los RecyclerViews
+        loadRecyclerViewCarrito()
+        loadRecyclerViewComprados()
+
+
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        loadCarrito()
+    }
+
+
+
+
+    private fun loadRecyclerViewCarrito(){
+        rvCarrito = view?.findViewById(R.id.rvCarrito)!!
+        rvCarrito.layoutManager = LinearLayoutManager(context)
+        carritoAdapter = CarritoAdapter(alimetosCarritoList, requireContext(), alimentosCompradosList, buyCarritoAdapter ,this)
+        rvCarrito.adapter = carritoAdapter
+
+    }
+
+    private fun loadRecyclerViewComprados(){
+        rvComprados = view?.findViewById(R.id.rvComprados)!!
+        rvComprados.layoutManager = LinearLayoutManager(context)
+        buyCarritoAdapter = BuyCarritoAdapter(alimentosCompradosList, requireContext(), alimetosCarritoList, carritoAdapter ,this)
+        rvComprados.adapter = buyCarritoAdapter
     }
 
     private fun loadCarrito(){
@@ -85,6 +128,7 @@ class CarritoFragment : Fragment(R.layout.fragment_carrito) {
                                     alimetosCarritoList.add(alimento)
                                 }
                             }
+                            loadRecyclerViewCarrito()
                         } else {
                             lytCarrito.visibility = View.GONE
                         }
@@ -109,6 +153,7 @@ class CarritoFragment : Fragment(R.layout.fragment_carrito) {
                                     alimentosCompradosList.add(alimento)
                                 }
                             }
+                            loadRecyclerViewComprados()
                         } else {
                             lytProductosComprados.visibility = View.GONE
                         }
@@ -123,4 +168,30 @@ class CarritoFragment : Fragment(R.layout.fragment_carrito) {
             }
 
     }
+
+
+    override fun onItemClicked() {
+        if (alimetosCarritoList.size == 0 && alimentosCompradosList.size == 0){
+            lytCarrito.visibility = View.GONE
+            lytProductosComprados.visibility = View.GONE
+            lytSinAlimentos.visibility = View.VISIBLE
+        }
+        if (alimetosCarritoList.size == 0 && alimentosCompradosList.size > 0){
+            lytCarrito.visibility = View.GONE
+            lytProductosComprados.visibility = View.VISIBLE
+            lytSinAlimentos.visibility = View.GONE
+        }
+        if (alimentosCompradosList.size == 0 && alimetosCarritoList.size > 0){
+            lytCarrito.visibility = View.VISIBLE
+            lytProductosComprados.visibility = View.GONE
+            lytSinAlimentos.visibility = View.GONE
+        }
+        if (alimetosCarritoList.size > 0 && alimentosCompradosList.size > 0){
+            lytCarrito.visibility = View.VISIBLE
+            lytProductosComprados.visibility = View.VISIBLE
+            lytSinAlimentos.visibility = View.GONE
+        }
+    }
+
+
 }
