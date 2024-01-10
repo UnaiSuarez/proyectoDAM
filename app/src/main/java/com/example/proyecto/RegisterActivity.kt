@@ -99,7 +99,14 @@ class RegisterActivity : AppCompatActivity() {
                             "dateRegister" to dateRegister
                         )
                     )
-
+                    val db = FirebaseFirestore.getInstance()
+                    db.collection("carrito").document(email).set(
+                        hashMapOf(
+                            "alimentos" to arrayListOf<Alimento>(),
+                            "alimentosComprados" to arrayListOf<Alimento>()
+                        )
+                    )
+                    LoginActivity.useremail = email
                     goHome(email, "email")
                 } else {
                     Toast.makeText(this, "Error al registrar usuario", Toast.LENGTH_LONG).show()

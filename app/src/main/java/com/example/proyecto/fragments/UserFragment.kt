@@ -107,8 +107,6 @@ class UserFragment : Fragment(R.layout.fragment_user) {
                 }
             db.collection("users").document(LoginActivity.useremail).delete()
                 .addOnSuccessListener {
-                    Toast.makeText(context, "Usuario eliminado correctamente", Toast.LENGTH_LONG).show()
-                    signOut()
                 }
                 .addOnFailureListener { exception ->
                     Toast.makeText(context, "Error al eliminar el usuario", Toast.LENGTH_LONG).show()
@@ -117,7 +115,16 @@ class UserFragment : Fragment(R.layout.fragment_user) {
                 .addOnFailureListener { exception ->
                     Toast.makeText(context, "Error al eliminar el carrito", Toast.LENGTH_LONG).show()
                 }
+
         }
+        FirebaseAuth.getInstance().currentUser?.delete()
+            ?.addOnSuccessListener {
+                Toast.makeText(context, "Usuario eliminado correctamente", Toast.LENGTH_LONG).show()
+                signOut()
+            }
+            ?.addOnFailureListener { exception ->
+                Toast.makeText(context, "Error al eliminar el usuario", Toast.LENGTH_LONG).show()
+            }
         builder.setNegativeButton("Cancelar", null)
         val dialog: android.app.AlertDialog = builder.create()
         dialog.show()
