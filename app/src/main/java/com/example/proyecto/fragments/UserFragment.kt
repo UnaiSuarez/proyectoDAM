@@ -113,6 +113,10 @@ class UserFragment : Fragment(R.layout.fragment_user) {
                 .addOnFailureListener { exception ->
                     Toast.makeText(context, "Error al eliminar el usuario", Toast.LENGTH_LONG).show()
                 }
+            db.collection("carrito").document(LoginActivity.useremail).delete()
+                .addOnFailureListener { exception ->
+                    Toast.makeText(context, "Error al eliminar el carrito", Toast.LENGTH_LONG).show()
+                }
         }
         builder.setNegativeButton("Cancelar", null)
         val dialog: android.app.AlertDialog = builder.create()

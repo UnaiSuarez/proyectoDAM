@@ -9,6 +9,7 @@ import android.view.View.OnClickListener
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.PopupMenu
+import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.proyecto.Alimento
@@ -91,12 +92,33 @@ class AlimentosAlmacenAdapter(
     private fun editAlimento(alimento: Alimento) {
         val position = alimentosAlmacen.indexOf(alimento)
         val builder = AlertDialog.Builder(context)
-        builder.setTitle("Editar cantidad")
-        val input = EditText(context)
-        input.inputType = InputType.TYPE_CLASS_NUMBER
-        builder.setView(input)
+        val inflater = LayoutInflater.from(context)
+        val view = inflater.inflate(R.layout.custom_dialog_layout, null)
+        builder.setView(view)
+        val input = view.findViewById<TextView>(R.id.textCantidad)
+        input.text = alimento.cantidad.toString()
+        var cantidad: Int
+        val botonMas = view.findViewById<TextView>(R.id.button_plus)
+        val botonMenos = view.findViewById<TextView>(R.id.button_minus)
+        botonMas.setOnClickListener {
+            var cantidad = input.text.toString().toInt()
+            cantidad++
+            input.text = cantidad.toString()
+        }
+        botonMenos.setOnClickListener {
+            var cantidad = input.text.toString().toInt()
+            if (cantidad > 1) {
+                cantidad--
+                input.text = cantidad.toString()
+            }
+        }
         builder.setPositiveButton("OK") { dialog, which ->
-            alimento.cantidad = input.text.toString().toInt()
+            if (input.text == null || input.text.toString() == "") {
+                cantidad = alimento.cantidad!!}
+            else{
+                cantidad = input.text.toString().toInt()
+            }
+            alimento.cantidad = cantidad
             alimentosAlmacen[position] = alimento
 
             // Actualiza la lista en Firebase

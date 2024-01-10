@@ -3,6 +3,7 @@ package com.example.proyecto.fragments
 import android.app.AlertDialog
 import android.os.Bundle
 import android.text.InputType
+import android.view.LayoutInflater
 import androidx.fragment.app.Fragment
 import android.view.View
 import android.widget.ArrayAdapter
@@ -114,12 +115,25 @@ class AlmacenFragment : Fragment(R.layout.fragment_almacen) {
         //si el autocompletar no esta vacio
         if (autoCompleteTextView.text.toString() != "") {
             val builder = AlertDialog.Builder(context)
-            //dialogo para introducir la cantidad del alimento
-            builder.setTitle("Editar cantidad")
-            val input = EditText(context)
-            //tipo de entrada de texto numerico
-            input.inputType = InputType.TYPE_CLASS_NUMBER
-            builder.setView(input)
+            val inflater = LayoutInflater.from(context)
+            val view = inflater.inflate(R.layout.custom_dialog_layout, null)
+            builder.setView(view)
+            val input = view.findViewById<TextView>(R.id.textCantidad)
+            input.text = cantidadAlimento.toString()
+            val botonMas = view.findViewById<TextView>(R.id.button_plus)
+            val botonMenos = view.findViewById<TextView>(R.id.button_minus)
+            botonMas.setOnClickListener {
+                var cantidad = input.text.toString().toInt()
+                cantidad++
+                input.text = cantidad.toString()
+            }
+            botonMenos.setOnClickListener {
+                var cantidad = input.text.toString().toInt()
+                if (cantidad > 1) {
+                    cantidad--
+                    input.text = cantidad.toString()
+                }
+            }
             //al pulsar ok, añadir el alimento al almacen
             builder.setPositiveButton("OK") { dialog, which ->
                 //si la cantidad no esta vacia, asignar la cantidad introducida, si esta vacia, asignar 1
