@@ -2,7 +2,6 @@ package com.example.proyecto.fragments
 
 import android.app.AlertDialog
 import android.os.Bundle
-import android.text.InputType
 import android.view.LayoutInflater
 import androidx.fragment.app.Fragment
 import android.view.View
@@ -51,6 +50,9 @@ class CarritoFragment : Fragment(R.layout.fragment_carrito), OnItemClickListener
 
         loadAllAliemntos()
 
+
+
+
         lytCarrito = view.findViewById(R.id.lytCarrito)
         lytProductosComprados = view.findViewById(R.id.lytProductosComprados)
         lytSinAlimentos = view.findViewById(R.id.lytSinAlimentos)
@@ -86,7 +88,7 @@ class CarritoFragment : Fragment(R.layout.fragment_carrito), OnItemClickListener
             addAlimento()
         }
 
-
+        onItemClicked()
 
     }
 

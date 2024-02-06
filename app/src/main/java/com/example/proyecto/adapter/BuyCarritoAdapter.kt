@@ -6,14 +6,18 @@ import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.PopupMenu
+import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.proyecto.Alimento
 import com.example.proyecto.LoginActivity
 import com.example.proyecto.R
+import com.example.proyecto.Unidad
+import com.example.proyecto.utilites.Utilidades
 import com.google.firebase.firestore.FirebaseFirestore
 
 class BuyCarritoAdapter(
@@ -74,45 +78,7 @@ class BuyCarritoAdapter(
     }
 
     private fun editAlimento(alimento: Alimento) {
-        val position = buyCarritoList.indexOf(alimento)
-        val builder = AlertDialog.Builder(context)
-        val inflater = LayoutInflater.from(context)
-        val view = inflater.inflate(R.layout.custom_dialog_layout, null)
-        builder.setView(view)
-        val input = view.findViewById<TextView>(R.id.textCantidad)
-        input.text = alimento.cantidad.toString()
-        var cantidad: Int
-        val botonMas = view.findViewById<TextView>(R.id.button_plus)
-        val botonMenos = view.findViewById<TextView>(R.id.button_minus)
-        botonMas.setOnClickListener {
-            var cantidad = input.text.toString().toInt()
-            cantidad++
-            input.text = cantidad.toString()
-        }
-        botonMenos.setOnClickListener {
-            var cantidad = input.text.toString().toInt()
-            if (cantidad > 1) {
-                cantidad--
-                input.text = cantidad.toString()
-            }
-        }
-        builder.setPositiveButton("OK") { dialog, which ->
-            if (input.text == null || input.text.toString() == "") {
-                cantidad = alimento.cantidad!!
-            }else{
-                cantidad = input.text.toString().toInt()
-            }
-            alimento.cantidad = cantidad
-            buyCarritoList[position] = alimento
-
-            // Actualiza la lista en Firebase
-            val db = FirebaseFirestore.getInstance()
-            db.collection("carrito").document(LoginActivity.useremail).update("alimentosComprados", buyCarritoList)
-            notifyItemChanged(position)
-            listener.onItemClicked()
-
-        }
-        builder.show()
+        Utilidades.editAlimento(alimento, buyCarritoList, "carrito", "alimentosComprados", LoginActivity.useremail, context, listener, this)
     }
 
     private fun devolverFunction(alimento: Alimento, view: View, context: Context) {

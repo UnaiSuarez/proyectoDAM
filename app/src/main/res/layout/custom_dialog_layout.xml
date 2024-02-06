@@ -16,6 +16,14 @@
             android:layout_gravity="center_vertical"
             android:textColor="@color/black"/>
 
+    <Spinner
+        android:id="@+id/spinnerUnidad"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        style="@style/SpinnerStyle" />
+
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

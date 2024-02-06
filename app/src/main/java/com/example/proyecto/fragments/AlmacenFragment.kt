@@ -12,6 +12,7 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.PopupMenu
 import android.widget.ProgressBar
+import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.proyecto.Alimento
 import com.example.proyecto.Almacen
 import com.example.proyecto.R
+import com.example.proyecto.Unidad
 import com.example.proyecto.adapter.AlimentosAlmacenAdapter
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -109,6 +111,7 @@ class AlmacenFragment : Fragment(R.layout.fragment_almacen) {
 
     //añadir alimento al almacen (funcion privada)
     private fun addAlimentoPrivate(){
+        val unidades = Unidad.values().map { it.nombreCompleto }
         var cantidadAlimento = 1
         var alimentoBd: Alimento? = null
         var category: String? = null
@@ -122,6 +125,10 @@ class AlmacenFragment : Fragment(R.layout.fragment_almacen) {
             input.text = cantidadAlimento.toString()
             val botonMas = view.findViewById<TextView>(R.id.button_plus)
             val botonMenos = view.findViewById<TextView>(R.id.button_minus)
+            val spinner: Spinner = view.findViewById(R.id.spinnerUnidad)
+            val adapterSpinner = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, unidades)
+            adapterSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            spinner.adapter = adapterSpinner
             botonMas.setOnClickListener {
                 var cantidad = input.text.toString().toInt()
                 cantidad++
@@ -163,7 +170,8 @@ class AlmacenFragment : Fragment(R.layout.fragment_almacen) {
                                 category = "personalizada"
                             }
                             //crear el alimento
-                            val alimento: Alimento = Alimento(autoCompleteTextView.text.toString(), category.toString(), cantidadAlimento)
+                            val unidadSeleccionada = Unidad.valueOf(spinner.selectedItem.toString().toUpperCase())
+                            val alimento: Alimento = Alimento(autoCompleteTextView.text.toString(), category.toString(), cantidadAlimento, unidadSeleccionada)
                             //añadir el alimento a la lista de alimentos del almacen
                             alimentosAlmacenList.add(alimento)
                             //añadir el alimento a la base de datos
