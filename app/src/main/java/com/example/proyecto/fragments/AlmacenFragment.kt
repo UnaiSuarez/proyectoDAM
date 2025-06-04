@@ -170,7 +170,7 @@ class AlmacenFragment : Fragment(R.layout.fragment_almacen) {
                                 category = "personalizada"
                             }
                             //crear el alimento
-                            val unidadSeleccionada = Unidad.valueOf(spinner.selectedItem.toString().toUpperCase())
+                            val unidadSeleccionada = Unidad.values()[spinner.selectedItemPosition]
                             val alimento: Alimento = Alimento(autoCompleteTextView.text.toString(), category.toString(), cantidadAlimento, unidadSeleccionada)
                             //añadir el alimento a la lista de alimentos del almacen
                             alimentosAlmacenList.add(alimento)
